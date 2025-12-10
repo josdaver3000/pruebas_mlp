@@ -6,15 +6,14 @@ import math
 
 operaciones_totales = 0
 
-
+#! Incrementa el contador global de operaciones
 def incrementar_operaciones(cantidad=1):
-    """Incrementa el contador global de operaciones"""
     global operaciones_totales
     operaciones_totales += cantidad
 
 
+#!Búsqueda lineal con conteo de operaciones
 def busqueda_lineal_contada(arr, x):
-    """Búsqueda lineal con conteo de operaciones"""
     global operaciones_totales
     operaciones_totales = 0
     
@@ -25,8 +24,8 @@ def busqueda_lineal_contada(arr, x):
     return -1, operaciones_totales
 
 
+#!Búsqueda binaria con conteo de operaciones
 def busqueda_binaria_contada(arr, x):
-    """Búsqueda binaria con conteo de operaciones"""
     global operaciones_totales
     operaciones_totales = 0
     
@@ -49,12 +48,10 @@ def busqueda_binaria_contada(arr, x):
     
     return -1, operaciones_totales
 
-
+#! Bubble sort con conteo de operaciones
 def bubble_sort_contado(arr):
-    """Bubble sort con conteo de operaciones"""
     global operaciones_totales
     operaciones_totales = 0
-    
     a = arr[:]
     n = len(a)
     for i in range(n):
@@ -67,9 +64,9 @@ def bubble_sort_contado(arr):
                 incrementar_operaciones(2)
     return a, operaciones_totales
 
-
+#! Selection sort con conteo de operaciones
 def selection_sort_contado(arr):
-    """Selection sort con conteo de operaciones"""
+    
     global operaciones_totales
     operaciones_totales = 0
     
@@ -87,9 +84,9 @@ def selection_sort_contado(arr):
         a[i], a[min_idx] = a[min_idx], a[i]
     return a, operaciones_totales
 
-
+#! Insertion sort con conteo de operaciones
 def insertion_sort_contado(arr):
-    """Insertion sort con conteo de operaciones"""
+    
     global operaciones_totales
     operaciones_totales = 0
     
@@ -106,9 +103,9 @@ def insertion_sort_contado(arr):
         a[j + 1] = key
     return a, operaciones_totales
 
-
+#! Merge sort con conteo de operaciones
 def merge_sort_contado(arr):
-    """Merge sort con conteo de operaciones"""
+    
     global operaciones_totales
     
     def merge_helper(left, right):
@@ -145,9 +142,9 @@ def merge_sort_contado(arr):
     resultado = merge_sort_rec(arr)
     return resultado, operaciones_totales
 
-
+#! Quick sort con conteo de operaciones
 def quick_sort_contado(arr):
-    """Quick sort con conteo de operaciones"""
+    
     global operaciones_totales
     
     def particionar(a, low, high):
@@ -177,9 +174,8 @@ def quick_sort_contado(arr):
     quick_sort_rec(a, 0, len(a) - 1)
     return a, operaciones_totales
 
-
+#! Dijkstra con conteo de operaciones - O(n^2)"""
 # def dijkstra_contado(graph, start):
-#     """Dijkstra con conteo de operaciones - O(n^2)"""
 #     global operaciones_totales
 #     operaciones_totales = 0
     
