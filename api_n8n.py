@@ -75,14 +75,8 @@ def analizar():
     #! Endpoint principal: recibe código Python y retorna análisis de complejidad
     #! Combina análisis estático + predicción MLP
     #* Request esperado: {"codigo": "<código Python>"}
-    
-    print("RAW JSON ->", data)
-    print("CODIGO ->", data.get("codigo"))
-
     try:
-        print("FULL JSON BODY ->", request.data)
-
-        data = request.json
+        data = request.json 
         codigo = data.get('codigo', '').strip()
         if not codigo:
             return jsonify({

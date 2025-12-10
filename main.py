@@ -59,18 +59,79 @@ def cargar_modelo(archivo="modelo_mlp.json"):
         return None
 #*===== ENTRENAMIENTO =====
 
+import time
+
 def entrenar_mlp_inicial():
     #! Entrena la MLP desde cero usando el dataset combinado
     #! Se ejecuta solo si no existe modelo guardado
+    #! Muestra progreso con época, loss, accuracy y tiempo
     
+    print("\n" + "="*70)
+    print("ENTRENAMIENTO CON DATASET COMBINADO".center(70))
+    print("="*70)
+    
+    print("\nCargando recursos.csv...")
     X, Y_idx = load_data_combinado()
+    
+    print("\nNormalizando características...")
     X = normalize(X)
     Y = [one_hot(i, 4) for i in Y_idx]
     
+    print("\nCreando red neuronal...")
     mlp = MLP(n_inputs=8, n_hidden=16, n_outputs=4, lr=0.1)
+    print(f"   Arquitectura: 8 entradas → 16 ocultas → 4 salidas")
+    print(f"   Learning rate: 0.1")
     
-    for e in range(5000):
-        mlp.train_epoch(X, Y)
+    #! Entrenamiento con visualización de progreso
+    epochs = 5000
+    print(f"\nEntrenando por {epochs} épocas...\n")
+    
+    tiempo_inicio = time.time()
+    predicciones_correctas = 0
+    
+    for e in range(epochs):
+        loss = mlp.train_epoch(X, Y)
+        
+        #! Calcular accuracy cada 500 épocas
+        if e % 500 == 0:
+            correct = sum(1 for x, yi in zip(X, Y_idx) if mlp.predict(x) == yi)
+            acc = correct / len(X)
+            
+            #! Tiempo transcurrido
+            tiempo_transcurrido = time.time() - tiempo_inicio
+            
+            #! Estimar tiempo restante
+            if e > 0:
+                tiempo_por_epoca = tiempo_transcurrido / (e + 1)
+                epocas_restantes = epochs - (e + 1)
+                tiempo_restante = tiempo_por_epoca * epocas_restantes
+                tiempo_str = f" {tiempo_transcurrido:.2f}s / ~{tiempo_restante:.1f}s"
+            else:
+                tiempo_str = " 0.00s / ~0.0s"
+            
+            print(f"  Época {e:5d}/{epochs} | Loss: {loss:.8f} | Acc: {acc:.2%} ({correct}/{len(X)}) |{tiempo_str}")
+    
+    #! Evaluación final
+    print("\n" + "="*70)
+    print("EVALUACIÓN FINAL".center(70))
+    print("="*70)
+    
+    correct = sum(1 for x, yi in zip(X, Y_idx) if mlp.predict(x) == yi)
+    acc = correct / len(X)
+    print(f"\nAccuracy global: {acc:.2%} ({correct}/{len(X)})")
+    
+    #! Accuracy por clase
+    print("\nAccuracy por clase de complejidad:")
+    for clase_idx in range(4):
+        total = Y_idx.count(clase_idx)
+        correctos = sum(1 for yi in Y_idx if yi == clase_idx and mlp.predict(X[Y_idx.index(yi)]) == clase_idx)
+        if total > 0:
+            acc_clase = correctos / total
+            print(f"   {mapeo_inv[clase_idx]:12s}: {acc_clase:.2%} ({correctos}/{total})")
+    
+    tiempo_total = time.time() - tiempo_inicio
+    print(f"\nTiempo total de entrenamiento: {tiempo_total:.2f} segundos")
+    print("="*70 + "\n")
     
     return mlp
 
